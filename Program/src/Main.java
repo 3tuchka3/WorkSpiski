@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -6,52 +7,42 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        List<String> telephoneConversationsList = null;
+
+        File path = new File("C:\\Users\\Asup5\\Desktop\\WorkSpiski\\Program\\src\\data\\1_БЕЛИНВЕСТ.txt");
+        List<String> telephoneConversationsList = new ArrayList<>();
+
+        RandomAccessFile raf = new RandomAccessFile(path, "r");
+        String scan;
+        int temp = 0;
+
+        do {
+            scan = raf.readLine();
+            String res = new String(scan.getBytes(StandardCharsets.ISO_8859_1), "windows-1251"); //UTF-8 выводила так же "??????".
+            telephoneConversationsList.add(res);
+            temp++;
+            System.out.println(scan);
+        }while (raf.readLine() != null);
+        raf.close();
+
+
+        System.out.println(temp);
+
         File file = new File("C:\\Users\\Asup5\\Desktop\\WorkSpiski\\Program\\src\\data\\1_БЕЛИНВЕСТ.txt");
-        FileReader fr = new FileReader(file);
-        BufferedReader br = new BufferedReader(fr);
-        Scanner scan = new Scanner(br);
-        scan.useDelimiter(System.getProperty("line.separator"));
-        telephoneConversationsList = new ArrayList();
-
-        while (scan.hasNext()) {
-            String next = scan.next();
-            telephoneConversationsList.add(next);
-        }
-
-        br.close();
-        fr.close();
-        Iterator var13 = telephoneConversationsList.iterator();
-
-        while (var13.hasNext()) {
-            String nextMass = (String) var13.next();
-            System.out.println(nextMass);
-        }
-
+        List<String> list = new ArrayList<>();
         try {
-            FileWriter writer = new FileWriter("C:\\Users\\Asup5\\Desktop\\WorkSpiski\\Program\\src\\data\\test.txt", false);
-
-            try {
-                Iterator var15 = telephoneConversationsList.iterator();
-
-                while (var15.hasNext()) {
-                    String nextMass = (String) var15.next();
-                    writer.write(nextMass + System.getProperty("line.separator"));
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String fileString = new String(line.getBytes(StandardCharsets.ISO_8859_1), "UTF-8");
+                    list.add(fileString);
                 }
-            } catch (Throwable var11) {
-                try {
-                    writer.close();
-                } catch (Throwable var10) {
-                    var11.addSuppressed(var10);
-                }
-
-                throw var11;
             }
-
-            writer.close();
-        } catch (IOException var12) {
-            System.out.println(var12.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
+        for (String fileString:list){
+            System.out.println(fileString);
+        }
+        System.out.println("ыватдфва");
     }
 }
